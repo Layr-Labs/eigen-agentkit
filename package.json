@@ -1,0 +1,36 @@
+{
+  "name": "@eigenlayer/agentkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A modular and extensible agent framework that provides verifiable AI capabilities",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "verifiable-inference",
+    "eigenlayer"
+  ],
+  "author": "Eigen Labs, Inc.",
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "turbo": "^1.12.2",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.1",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

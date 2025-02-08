@@ -1,0 +1,32 @@
+{
+  "name": "@eigenlayer/agentkit-core",
+  "version": "0.1.0",
+  "description": "Core interfaces and types for EigenLayer AgentKit",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "rimraf dist",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "verifiable-inference",
+    "eigenlayer"
+  ],
+  "author": "Eigen Labs, Inc.",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+} 
