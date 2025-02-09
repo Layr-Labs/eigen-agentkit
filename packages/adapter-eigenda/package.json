@@ -1,0 +1,31 @@
+{
+  "name": "@eigenlayer/agentkit-eigenda",
+  "version": "0.1.0",
+  "description": "EigenDA adapter for AgentKit providing data availability logging capabilities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@eigenlayer/agentkit": "workspace:*",
+    "eigenda-sdk": "latest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.17.17",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@eigenlayer/agentkit": "workspace:*"
+  }
+}

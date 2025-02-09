@@ -1,5 +1,5 @@
 /**
- * Represents a zkTLS proof that can be verified
+ * Represents a proof that can be verified
  */
 export interface Proof {
   /** The type of proof (e.g., 'opacity', 'reclaim', etc.) */
@@ -58,5 +58,75 @@ export class ProofGenerationError extends Error {
   ) {
     super(message);
     this.name = 'ProofGenerationError';
+  }
+}
+
+/**
+ * Represents the status of a log entry in the data availability layer
+ */
+export interface DALogStatus {
+  /** The type of status (e.g., 'stored', 'pending', 'failed') */
+  type: string;
+  /** The raw status data */
+  data: unknown;
+  /** Timestamp when the status was last updated */
+  timestamp: number;
+  /** Optional metadata associated with the status */
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * Configuration options for DA logging operations
+ */
+export interface DALogOptions {
+  /** Optional timeout in milliseconds */
+  timeout?: number;
+  /** Optional tags for categorizing logs */
+  tags?: string[];
+  /** Log level */
+  level?: 'info' | 'warn' | 'error' | 'debug';
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * A log entry stored in the data availability layer
+ */
+export interface DALogEntry {
+  /** Unique identifier for the log entry */
+  id: string;
+  /** The logged message or data */
+  content: unknown;
+  /** Timestamp when the log was created */
+  timestamp: number;
+  /** Status of the log in the DA layer */
+  status: DALogStatus;
+  /** Options used when creating the log */
+  options?: DALogOptions;
+}
+
+/**
+ * Error thrown when DA log storage fails
+ */
+export class DALogStorageError extends Error {
+  constructor(
+    message: string,
+    public readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = 'DALogStorageError';
+  }
+}
+
+/**
+ * Error thrown when DA log retrieval fails
+ */
+export class DALogRetrievalError extends Error {
+  constructor(
+    message: string,
+    public readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = 'DALogRetrievalError';
   }
 } 

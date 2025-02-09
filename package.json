@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "A modular and extensible agent framework that provides verifiable AI capabilities",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

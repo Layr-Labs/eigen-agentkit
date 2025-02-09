@@ -1,5 +1,5 @@
 {
-  "name": "@eigenlayer/agentkit-core",
+  "name": "@eigenlayer/agentkit",
   "version": "0.1.0",
   "description": "Core interfaces and types for EigenLayer AgentKit",
   "main": "dist/index.js",
@@ -22,6 +22,7 @@
   "author": "Eigen Labs, Inc.",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.11.16",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
@@ -29,4 +30,4 @@
   "publishConfig": {
     "access": "public"
   }
-} 
+}

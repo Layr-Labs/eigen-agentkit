@@ -1,5 +1,5 @@
 import { OpacityProverResponse } from '../types';
-import { Proof, ProofVerificationError } from '@eigenlayer/agentkit-core';
+import { Proof, ProofVerificationError } from '@eigenlayer/agentkit';
 
 /**
  * Verify a proof using the Opacity prover service
