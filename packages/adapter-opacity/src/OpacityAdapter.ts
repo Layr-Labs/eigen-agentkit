@@ -10,27 +10,67 @@ import {
   ProofVerificationError,
   Proof
 } from '@eigenlayer/agentkit';
-import { ModelProvider, OpacityAdapterConfig, ModelConfig } from './types';
+import { ModelProvider, OpacityAdapterConfig, ModelConfig, ChatMessage } from './types';
 import { generateProof, verifyProof } from './utils/api';
 
 const DEFAULT_MODELS: Record<ModelProvider, Record<string, ModelConfig>> = {
   [ModelProvider.OPENAI]: {
-    'gpt-4': {
-      name: 'gpt-4',
+    'gpt-4o': {
+      name: 'gpt-4o',
       temperature: 0.7,
       maxOutputTokens: 2048,
       frequencyPenalty: 0,
       presencePenalty: 0,
     },
-    'gpt-3.5-turbo': {
-      name: 'gpt-3.5-turbo',
+    'gpt-4o-mini': {
+      name: 'gpt-4o-mini',
       temperature: 0.7,
       maxOutputTokens: 2048,
       frequencyPenalty: 0,
       presencePenalty: 0,
     },
   },
+  [ModelProvider.ANTHROPIC]: {
+    'claude-3-opus': {
+      name: 'claude-3-opus',
+      temperature: 0.7,
+      maxOutputTokens: 4096,
+      topP: 0.9,
+    },
+    'claude-3-sonnet': {
+      name: 'claude-3-sonnet',
+      temperature: 0.7,
+      maxOutputTokens: 4096,
+      topP: 0.9,
+    },
+    'claude-3-haiku': {
+      name: 'claude-3-haiku',
+      temperature: 0.7,
+      maxOutputTokens: 4096,
+      topP: 0.9,
+    },
+  },
 };
+
+interface LogData {
+  data: unknown;
+  timestamp: number;
+  level: 'info' | 'warn' | 'error' | 'debug';
+  metadata?: Record<string, unknown>;
+  tags?: string[];
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+interface AnthropicResponse {
+  content: string;
+}
 
 export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAdapter {
   private readonly config: OpacityAdapterConfig;
@@ -70,8 +110,7 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
   }
 
   private async storeLog(data: unknown, options?: DALogOptions): Promise<string> {
-    const endpoint = `${this.config.gatewayUrl}/logs`;
-    const response = await fetch(endpoint, {
+    const response = await fetch(`${this.config.gatewayUrl}/logs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -170,37 +209,65 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
 
   async generateText(
     prompt: string,
-    options?: GenerateTextOptions,
+    options?: GenerateTextOptions
   ): Promise<VerifiableInferenceResult> {
-    const provider = this.config.modelProvider ?? ModelProvider.OPENAI;
-    const model = options?.model || 'gpt-4';
-    const providerModels = DEFAULT_MODELS[provider];
-
-    if (!providerModels) {
-      throw new Error(`Unsupported model provider: ${provider}`);
-    }
-
-    const modelConfig = providerModels[model];
-    if (!modelConfig) {
-      throw new Error(`Unsupported model: ${model}`);
-    }
-
-    const endpoint = `${this.config.gatewayUrl}/${provider}/chat/completions`;
-    const body = {
-      model: modelConfig.name,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      temperature: options?.temperature ?? modelConfig.temperature,
-      max_tokens: options?.maxTokens ?? modelConfig.maxOutputTokens,
-      frequency_penalty: modelConfig.frequencyPenalty,
-      presence_penalty: modelConfig.presencePenalty,
-    };
-
     try {
+      const provider = this.config.modelProvider ?? ModelProvider.OPENAI;
+      const model = options?.model || (provider === ModelProvider.OPENAI ? 'gpt-4o' : 'claude-3-sonnet');
+      const providerModels = DEFAULT_MODELS[provider];
+
+      if (!providerModels) {
+        throw new Error(`Unsupported model provider: ${provider}`);
+      }
+
+      const modelConfig = providerModels[model];
+      if (!modelConfig) {
+        throw new Error(`Unsupported model: ${model}`);
+      }
+
+      const endpoint = `${this.config.gatewayUrl}/${provider}/chat/completions`;
+      
+      console.log('Generating text with options:', {
+        modelProvider: provider,
+        model: model,
+        endpoint: endpoint
+      });
+
+      // Prepare the request body based on the provider
+      let body: any;
+      
+      if (provider === ModelProvider.OPENAI) {
+        body = {
+          model: modelConfig.name,
+          messages: [
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+          temperature: options?.temperature ?? modelConfig.temperature,
+          max_tokens: options?.maxTokens ?? modelConfig.maxOutputTokens,
+          frequency_penalty: modelConfig.frequencyPenalty,
+          presence_penalty: modelConfig.presencePenalty,
+        };
+      } else if (provider === ModelProvider.ANTHROPIC) {
+        body = {
+          model: modelConfig.name,
+          messages: [
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+          temperature: options?.temperature ?? modelConfig.temperature,
+          max_tokens: options?.maxTokens ?? modelConfig.maxOutputTokens,
+          top_p: modelConfig.topP,
+          top_k: modelConfig.topK,
+        };
+      }
+
+      console.debug('Request body:', JSON.stringify(body, null, 2));
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -211,8 +278,26 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText
+        });
+        throw new Error(`API request failed: ${errorText}`);
       }
+
+      // Log response details in a TypeScript-friendly way
+      const headers: Record<string, string> = {};
+      response.headers.forEach((value, key) => {
+        headers[key] = value;
+      });
+
+      console.debug('API response:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+      });
 
       const logId = response.headers.get('cf-aig-log-id');
       if (!logId) {
@@ -220,15 +305,24 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
       }
 
       const result = await response.json();
-      const content = result.choices[0].message.content;
+      const content = provider === ModelProvider.OPENAI 
+        ? (result as OpenAIResponse).choices[0]?.message?.content
+        : (result as AnthropicResponse).content;
 
+      if (!content) {
+        throw new ProofGenerationError('No content returned from API');
+      }
+
+      console.debug('Generating proof for log ID:', logId);
       const proof = await generateProof(this.config.opacityProverUrl, logId);
+      console.debug('Proof generated successfully');
 
       return {
         content,
         proof,
       };
     } catch (error) {
+      console.error('Error in generateText:', error);
       if (error instanceof ProofGenerationError) {
         throw error;
       }
@@ -237,16 +331,10 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
   }
 
   async verifyProof(proof: Proof): Promise<boolean> {
-    if (proof.type !== 'opacity') {
-      throw new Error('Invalid proof type');
+    try {
+      return await verifyProof(this.config.opacityProverUrl, proof);
+    } catch (error) {
+      throw new ProofVerificationError('Failed to verify proof', proof, error);
     }
-
-    const logId = proof.metadata?.logId as string;
-    if (!logId) {
-      throw new Error('Missing log ID in proof metadata');
-    }
-
-    const result = await verifyProof(this.config.opacityProverUrl, logId, proof);
-    return result.success;
   }
 } 

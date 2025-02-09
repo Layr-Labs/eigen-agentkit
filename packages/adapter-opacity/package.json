@@ -3,15 +3,12 @@
   "version": "0.1.0",
   "description": "Opacity adapter for verifiable inference in EigenLayer AgentKit",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
     "clean": "rimraf dist",
-    "lint": "eslint src --ext .ts",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsc -p tsconfig.json --watch"
   },
   "keywords": [
     "ai",
@@ -27,9 +24,9 @@
     "@eigenlayer/agentkit": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "rimraf": "^5.0.5",
-    "typescript": "^5.3.3",
+    "@types/node": "^20.0.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0",
     "vitest": "^1.2.2"
   },
   "publishConfig": {

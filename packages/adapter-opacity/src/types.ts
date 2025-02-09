@@ -3,6 +3,7 @@
  */
 export enum ModelProvider {
   OPENAI = 'openai',
+  ANTHROPIC = 'anthropic',
   // Add more providers as they become available
 }
 
@@ -10,18 +11,33 @@ export enum ModelProvider {
  * Configuration for the Opacity adapter
  */
 export interface OpacityAdapterConfig {
-  /** Cloudflare team ID */
+  /** The Cloudflare team ID */
   teamId: string;
-  /** Cloudflare team name */
+  /** The Cloudflare team name */
   teamName: string;
-  /** API key for the model provider */
+  /** The API key for authentication */
   apiKey: string;
-  /** Model provider (default: OPENAI) */
-  modelProvider?: ModelProvider;
-  /** Base URL for the Opacity prover service */
+  /** The URL of the Opacity prover service */
   opacityProverUrl: string;
+  /** The model provider to use (default: OPENAI) */
+  modelProvider?: ModelProvider;
   /** Base URL for the Cloudflare AI Gateway (optional) */
   gatewayUrl?: string;
+}
+
+/**
+ * Role of a chat message
+ */
+export type MessageRole = 'system' | 'user' | 'assistant';
+
+/**
+ * A single message in a chat conversation
+ */
+export interface ChatMessage {
+  /** The role of who sent the message */
+  role: MessageRole;
+  /** The content of the message */
+  content: string;
 }
 
 /**
@@ -38,6 +54,12 @@ export interface ModelConfig {
   frequencyPenalty?: number;
   /** Presence penalty */
   presencePenalty?: number;
+  /** Top-p sampling (nucleus sampling) */
+  topP?: number;
+  /** Top-k sampling */
+  topK?: number;
+  /** System prompt for chat models */
+  systemPrompt?: string;
 }
 
 /**

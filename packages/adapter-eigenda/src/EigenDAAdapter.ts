@@ -8,6 +8,7 @@ export interface EigenDAAdapterConfig {
   creditsContractAddress?: string;
   flushInterval?: number; // How often to flush logs (in ms), defaults to 10000 (10s)
   maxBufferSize?: number; // Max number of logs to buffer before forcing a flush
+  waitForConfirmation?: boolean; // Whether to wait for confirmation by default, defaults to false
 }
 
 export interface LogEntry {
@@ -15,6 +16,9 @@ export interface LogEntry {
   message: string;
   timestamp: number;
   metadata?: Record<string, unknown>;
+  tempId?: string;
+  data: unknown;
+  options?: DALogOptions;
 }
 
 export interface PostResult {
@@ -37,6 +41,8 @@ export class EigenDAAdapter implements IDALoggingAdapter {
   private maxBufferSize: number;
   private flushTimer?: ReturnType<typeof setInterval>;
   private isInitialized = false;
+  private config: EigenDAAdapterConfig;
+  private pendingLogs: Map<string, { resolve: (entry: DALogEntry) => void }> = new Map();
 
   constructor(config: EigenDAAdapterConfig) {
     this.client = new EigenDAClient({
@@ -47,6 +53,7 @@ export class EigenDAAdapter implements IDALoggingAdapter {
     });
     this.flushInterval = config.flushInterval || 10000; // Default 10 seconds
     this.maxBufferSize = config.maxBufferSize || 1000; // Default 1000 logs
+    this.config = config;
   }
 
   /**
@@ -106,19 +113,30 @@ export class EigenDAAdapter implements IDALoggingAdapter {
 
     const entry: LogEntry = {
       level: (options?.level || 'info') as 'info' | 'warn' | 'error' | 'debug',
-      message: String(data),
+      message: typeof data === 'object' ? JSON.stringify(data) : String(data),
       timestamp: Date.now(),
       metadata: options?.metadata,
+      data,
+      options,
     };
 
-    this.logBuffer.push(entry);
+    // Create a promise that will be resolved when we get the real job ID
+    const tempId = `temp-${Date.now()}-${this.logBuffer.length + 1}`;
+    const logPromise = new Promise<DALogEntry>((resolve) => {
+      this.pendingLogs.set(tempId, { resolve });
+    });
+
+    this.logBuffer.push({
+      ...entry,
+      tempId,
+    });
 
     // Force flush if buffer is too large
     if (this.logBuffer.length >= this.maxBufferSize) {
       await this.flush();
     }
 
-    return this.storeLog(entry, options);
+    return logPromise;
   }
 
   // Convenience methods for different log levels
@@ -148,11 +166,55 @@ export class EigenDAAdapter implements IDALoggingAdapter {
     this.logBuffer = [];
 
     try {
-      // Create a verifiable log entry
-      const result = await this.storeLog(logsToFlush);
-      if (!result) {
-        throw new Error('Failed to store logs');
+      // Merge all logs into a single batch
+      const batchedLogs = {
+        logs: logsToFlush.map(log => ({
+          level: log.level,
+          message: log.message,
+          timestamp: log.timestamp,
+          metadata: log.metadata,
+          data: log.data,
+          options: log.options
+        })),
+        timestamp: Date.now(),
+        type: 'log_batch'
+      };
+
+      // Upload the batched logs
+      const content = JSON.stringify(batchedLogs);
+      const uploadResult = await this.client.upload(content, this.identifier!);
+      
+      // Extract job_id from the response
+      const jobId = (uploadResult as any).job_id;
+      if (!jobId) {
+        throw new Error('Failed to get job_id from upload result');
       }
+
+      // Create the status object
+      const daStatus: DALogStatus = {
+        type: 'eigenda',
+        data: {
+          jobId,
+          status: 'PENDING'
+        },
+        timestamp: Date.now(),
+      };
+
+      // Resolve all pending log promises with the real job ID
+      for (const log of logsToFlush) {
+        const pendingLog = this.pendingLogs.get(log.tempId!);
+        if (pendingLog) {
+          pendingLog.resolve({
+            id: jobId,
+            content: log.data,
+            timestamp: log.timestamp,
+            status: daStatus,
+            options: log.options
+          });
+          this.pendingLogs.delete(log.tempId!);
+        }
+      }
+
     } catch (error) {
       console.error('Error flushing logs to EigenDA:', error);
       // Put the logs back in the buffer
@@ -178,26 +240,24 @@ export class EigenDAAdapter implements IDALoggingAdapter {
 
     const uploadResult = await this.client.upload(content, this.identifier!);
     
-    // Wait for confirmation that data is available
-    const status = await this.client.waitForStatus(
-      uploadResult.jobId,
-      'CONFIRMED',
-      30, // max checks
-      20, // check interval (seconds)
-      60  // initial delay (seconds)
-    );
+    // Extract job_id from the response
+    const jobId = (uploadResult as any).job_id;
+    if (!jobId) {
+      throw new Error('Failed to get job_id from upload result');
+    }
 
+    // Create status without waiting for confirmation
     const daStatus: DALogStatus = {
       type: 'eigenda',
       data: {
-        jobId: uploadResult.jobId,
-        status: String(status),
+        jobId: jobId,
+        status: 'PENDING'
       },
       timestamp: Date.now(),
     };
 
     return {
-      id: uploadResult.jobId,
+      id: jobId,
       content: data,
       timestamp: Date.now(),
       status: daStatus,
@@ -311,6 +371,29 @@ export class EigenDAAdapter implements IDALoggingAdapter {
       const data = await this.get(id);
       if (!data) return null;
 
+      // Handle batched logs
+      const batchedData = data as { type?: string; logs?: any[] };
+      if (batchedData.type === 'log_batch' && Array.isArray(batchedData.logs)) {
+        // Return the first log in the batch for now
+        // You might want to implement a way to retrieve specific logs from the batch
+        const log = batchedData.logs[0];
+        return {
+          id,
+          content: log.data,
+          timestamp: log.timestamp,
+          status: {
+            type: 'eigenda',
+            data: {
+              jobId: id,
+              status: 'PENDING'
+            },
+            timestamp: log.timestamp,
+          },
+          options: log.options,
+        };
+      }
+
+      // Handle single log
       const parsedData = JSON.parse(String(data));
       return {
         id,
@@ -320,6 +403,7 @@ export class EigenDAAdapter implements IDALoggingAdapter {
           type: 'eigenda',
           data: {
             jobId: id,
+            status: 'PENDING'
           },
           timestamp: parsedData.timestamp,
         },

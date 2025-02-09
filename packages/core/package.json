@@ -3,15 +3,19 @@
   "version": "0.1.0",
   "description": "Core interfaces and types for EigenLayer AgentKit",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
     "clean": "rimraf dist",
-    "lint": "eslint src --ext .ts",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsc -p tsconfig.json --watch"
   },
   "keywords": [
     "ai",
@@ -21,11 +25,11 @@
   ],
   "author": "Eigen Labs, Inc.",
   "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "rimraf": "^5.0.5",
-    "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "rimraf": "^5.0.0"
   },
   "publishConfig": {
     "access": "public"

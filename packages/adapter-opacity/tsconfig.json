@@ -4,15 +4,15 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@eigenlayer/agentkit": ["../core/src"]
+      "@eigenlayer/agentkit": ["../core/dist"]
     }
   },
   "include": ["src/**/*"],

@@ -55,10 +55,10 @@ Create a `.env` file in the root directory with the following variables:
 
 ```env
 # Opacity Configuration
-OPACITY_TEAM_ID=your_team_id
-OPACITY_TEAM_NAME=your_team_name
 OPACITY_API_KEY=your_api_key
-OPACITY_PROVER_URL=your_prover_url
+OPACITY_TEAM_ID=f309ac8ae8a9a14a7e62cd1a521b1c5f
+OPACITY_TEAM_NAME=eigen-test
+OPACITY_PROVER_URL=https://opacity-ai-zktls-demo.vercel.app
 
 # EigenDA Configuration
 EIGENDA_PRIVATE_KEY=your_private_key
@@ -144,6 +144,14 @@ pnpm format
 ## Contributing
 
 Contributions are welcome! Please read our contributing guidelines (coming soon) for details on our code of conduct and the process for submitting pull requests.
+
+## Contributors
+
+Thanks to all our contributors who make AgentKit possible! 
+
+<a href="https://github.com/Layr-Labs/eigen-agentkit/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Layr-Labs/eigen-agentkit" />
+</a>
 
 ## License
 

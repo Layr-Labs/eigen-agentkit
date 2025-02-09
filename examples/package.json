@@ -1,0 +1,21 @@
+{
+  "name": "@eigenlayer/agentkit-examples",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@eigenlayer/agentkit": "workspace:*",
+    "@eigenlayer/agentkit-eigenda": "workspace:*",
+    "@eigenlayer/agentkit-opacity": "workspace:*",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.0"
+  }
+}

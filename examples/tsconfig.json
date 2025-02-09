@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@eigenlayer/*": ["../packages/*/src"]
+    }
+  },
+  "include": ["./**/*"],
+  "references": [
+    { "path": "../packages/core" },
+    { "path": "../packages/adapter-opacity" },
+    { "path": "../packages/adapter-eigenda" }
+  ]
+} 
