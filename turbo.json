@@ -12,6 +12,9 @@
     "lint": {
       "outputs": []
     },
+    "type-check": {
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

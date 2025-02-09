@@ -12,7 +12,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "type-check": "turbo run type-check"
   },
   "keywords": [
     "ai",
