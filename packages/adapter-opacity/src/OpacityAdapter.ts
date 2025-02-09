@@ -164,11 +164,6 @@ export class OpacityAdapter implements IVerifiableInferenceAdapter, IDALoggingAd
     }
   }
 
-  async queryLogs(criteria: { startTime?: number; endTime?: number; level?: string; tags?: string[] }): Promise<DALogEntry[]> {
-    // Opacity doesn't support querying logs directly
-    return [];
-  }
-
   async shutdown(): Promise<void> {
     // No cleanup needed for Opacity adapter
   }

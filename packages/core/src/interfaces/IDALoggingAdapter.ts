@@ -52,13 +52,6 @@ export interface IDALoggingAdapter {
   getLogEntry(id: string): Promise<DALogEntry | null>;
 
   /**
-   * Query logs based on criteria
-   * @param criteria Query criteria like time range, level, tags
-   * @returns Matching log entries
-   */
-  queryLogs(criteria: { startTime?: number; endTime?: number; level?: string; tags?: string[] }): Promise<DALogEntry[]>;
-
-  /**
    * Clean up resources and ensure all logs are stored
    */
   shutdown(): Promise<void>;

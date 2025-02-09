@@ -334,13 +334,4 @@ export class EigenDAAdapter implements IDALoggingAdapter {
       return null;
     }
   }
-
-  /**
-   * Query logs based on criteria
-   */
-  async queryLogs(criteria: { startTime?: number; endTime?: number; level?: string; tags?: string[] }): Promise<DALogEntry[]> {
-    // Note: This is a placeholder implementation since EigenDA doesn't support querying directly
-    // In a real implementation, you might want to maintain an index or use a separate storage
-    return [];
-  }
 } 
