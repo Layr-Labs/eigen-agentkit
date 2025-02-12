@@ -12,6 +12,7 @@
   "references": [
     { "path": "../packages/core" },
     { "path": "../packages/adapter-opacity" },
-    { "path": "../packages/adapter-eigenda" }
+    { "path": "../packages/adapter-eigenda" },
+    { "path": "../packages/adapter-witnesschain" }
   ]
 } 

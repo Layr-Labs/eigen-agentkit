@@ -7,6 +7,7 @@ This directory contains various examples demonstrating how to use AgentKit's ada
 ### Basic Usage
 - `basic-opacity.ts` - Simple verifiable inference using Opacity
 - `basic-eigenda.ts` - Simple data availability logging using EigenDA
+- `basic-witness.ts` - Photo verification and campaign management using Witnesschain
 
 ### Advanced Usage
 - `chat-history.ts` - Chat application with verifiable history using both adapters
@@ -39,4 +40,8 @@ EIGENDA_CREDITS_CONTRACT=0x0CC001F1bDe9cd129092d4d24D935DB985Ce42A9
 3. Run an example:
 ```bash
 ts-node examples/basic-opacity.ts
-``` 
+```
+
+## Environment Variables
+
+See `.env.example` for required configuration variables for each adapter. 
