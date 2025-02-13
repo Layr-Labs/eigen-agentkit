@@ -1,15 +1,15 @@
-# eigenlayer-agentkit
+# @eigen-labs/agentkit
 
 Core interfaces and types for the EigenLayer AgentKit framework. This package provides the foundation for building verifiable AI agents with zkTLS proofs.
 
 ## Installation
 
 ```bash
-npm install eigenlayer-agentkit
+npm install @eigen-labs/agentkit
 # or
-yarn add eigenlayer-agentkit
+yarn add @eigen-labs/agentkit
 # or
-pnpm add eigenlayer-agentkit
+pnpm add @eigen-labs/agentkit
 ```
 
 ## Features
@@ -29,7 +29,7 @@ import {
   VerifiableInferenceResult,
   Proof,
   GenerateTextOptions
-} from 'eigenlayer-agentkit';
+} from '@eigen-labs/agentkit';
 
 class MyInferenceAdapter implements IVerifiableInferenceAdapter {
   async generateText(
@@ -53,7 +53,7 @@ import {
   VerifiableLogEntry,
   Proof,
   LoggingOptions
-} from 'eigenlayer-agentkit';
+} from '@eigen-labs/agentkit';
 
 class MyLoggingAdapter implements IVerifiableLoggingAdapter {
   async log(

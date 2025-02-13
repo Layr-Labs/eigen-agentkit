@@ -35,12 +35,12 @@ importers:
 
   packages/adapter-eigenda:
     dependencies:
+      '@eigen-labs/agentkit':
+        specifier: workspace:*
+        version: link:../core
       eigenda-sdk:
         specifier: latest
         version: 0.1.0
-      eigenlayer-agentkit:
-        specifier: workspace:*
-        version: link:../core
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -72,7 +72,7 @@ importers:
 
   packages/adapter-opacity:
     dependencies:
-      eigenlayer-agentkit:
+      '@eigen-labs/agentkit':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -100,15 +100,15 @@ importers:
 
   packages/adapter-witnesschain:
     dependencies:
+      '@eigen-labs/agentkit':
+        specifier: workspace:*
+        version: link:../core
       axios:
         specifier: ^1.4.0
         version: 1.7.9
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
-      eigenlayer-agentkit:
-        specifier: workspace:*
-        version: link:../core
       ethers:
         specifier: ^6.7.0
         version: 6.13.5

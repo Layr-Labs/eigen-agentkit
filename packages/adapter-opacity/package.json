@@ -1,5 +1,5 @@
 {
-  "name": "agentkit-opacity",
+  "name": "@eigen-labs/agentkit-opacity",
   "version": "0.1.0",
   "description": "Opacity adapter for verifiable inference in EigenLayer AgentKit",
   "main": "dist/index.js",
@@ -22,7 +22,7 @@
   "author": "Eigen Labs, Inc.",
   "license": "MIT",
   "dependencies": {
-    "eigenlayer-agentkit": "workspace:*"
+    "@eigen-labs/agentkit": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

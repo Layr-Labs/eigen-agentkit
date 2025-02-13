@@ -1,5 +1,5 @@
 {
-  "name": "eigenlayer-agentkit",
+  "name": "@eigen-labs/agentkit",
   "version": "0.1.0",
   "description": "Core interfaces and types for EigenLayer AgentKit",
   "main": "dist/index.js",
