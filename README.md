@@ -4,7 +4,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - Opacity for verifiable inference
 - EigenDA for data availability logging
-- Witnesschain for proof of location verification (100+ miles)
+- WitnessChain for Real-world actuation and observation 
 - Reclaim for verifiable API calls (TBD)
 - Formation for verifiable code execution (TBD)
 - Silence for secret publishing (TBD)
@@ -138,16 +138,6 @@ await eigenDAAdapter.shutdown();
 
 ### Real-world Actuation and Observation with Witnesschain InfinityWatch
 The **Witnesschain Adapter** is a TypeScript-based utility that enables an agent to request tasks and observations in the real world. It works in conjunction with the **InfinityWatch app**, which acts as a portal to the physical world.
-
-#### **Setup**
-Before using Witnesschain, configure the required environment variables in your `.env` file:
-
-```env
-# Witnesschain Configuration
-WITNESSCHAIN_API_KEY=your_api_key
-WITNESSCHAIN_API_URL=https://api.witnesschain.com
-WITNESSCHAIN_PRIVATE_KEY=your_private_key
-```
 
 #### **Usage**
 
