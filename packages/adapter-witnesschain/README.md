@@ -1,6 +1,24 @@
 # @layr-labs/agentkit-witnesschain
 
 ## 📌 Overview
+The **Witnesschain Adapter** is a TypeScript-based utility that enables an agent to request tasks and observations in the real physical world. This utility works in conjunction with the InfinityWatch app - that acts as a portal to the real world. 
+
+The utility operates in 3 steps by sending requests to WitnessChain's API. 
+- Step 1 is to create a "campaign" - a specific action/observation to be requested from the InfinityWatch app. A campaign created here will show up on the app for all users
+- Step 2 is to fetch all geoverified observations made on the InfinityWatch app tied to your campaign and,
+- Step 3 is to classify if those geoverified images actually performed the task/observation your requested. 
+
+## 🚀 Features
+- 📷 Upload multiple images for verification
+- ⚡ Uses `axios` for efficient HTTP requests
+- 💤 Handles file streams properly to prevent memory overload
+- 🛠️ TypeScript support for better development experience
+- 🔑 Ethereum-based authentication using private keys
+- 🏛️ Create and manage blockchain campaigns
+
+# @layr-labs/agentkit-witnesschain
+
+## 📌 Overview
 The **Witnesschain Adapter** is a TypeScript-based utility that enables image verification and blockchain-based campaign creation by sending requests to an API. It handles file uploads using `axios` and `form-data`, and integrates Ethereum-based authentication using `ethers`.
 
 ## Installation
