@@ -65,6 +65,8 @@ async function main()
 			description			: "my-campaign-description",
 			type				: "individual",	// "group", "individual", OR "task"
 
+			// Individual campaigns allow app users to perform one action at a time
+			// Only "individual" campaigns are enabled at this point
 			// ---- Group campaigns may require 2 values ---
 			// location_limit_in_meters	: 100,		// how far can people in a group can be
 			// time_limit_in_minutes	: 60,		// how long the referral link is valid
@@ -74,7 +76,8 @@ async function main()
 				"tags"
 			],
 
-			// lat, long, and radius is not mandatory
+			// lat, long, and radius is not mandatory, but highly recommended 
+			// Please select your lat-long for campaigns to appear in the InfinityWatch app near you
 			latitude		: CAMPAIGN_LATITUDE,
 			longitude		: CAMPAIGN_LONGITUDE,
 			radius			: 100, // in kms the radius of circle within which the campaign is valid
@@ -82,10 +85,10 @@ async function main()
 			banner_url		: "https://www.google.com/x.png",	// images shown to user
 			poster_url		: "https://www.google.com/x.png",
 
-			currency		: "POINTS",	// What currency will be rewarded to participants
-			total_rewards		: 10.0,		// The MAX/total rewards the campaign can give
+			currency		: "POINTS",	// What currency will be rewarded to participants, we only allow virtual in-app "POINTS" at this moment
+			total_rewards		: 10.0,		// The MAX/total rewards the campaign can give 
 			reward_per_task		: 2.0,		// rewards per task
-			fuel_required		: 1.0,		// Fuel that will be spent by the user for this task
+			fuel_required		: 1.0,		// Fuel that will be spent by the user for this task (recommended to set it to 1)
 
 			starts_at		: starts_at,	//  When campaign starts and ends
 			ends_at			: ends_at,
@@ -106,7 +109,7 @@ async function main()
 		if (since)
 			console.log("===> Getting photos since",since);
 
-		try
+		try // Receive geo-verified photos taken from InfinityWatch 
 		{
 			photos = await witnesschain_client.getCampaignPhotos (
 					MY_CAMPAIGN,
