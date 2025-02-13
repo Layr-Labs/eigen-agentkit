@@ -1,5 +1,5 @@
 {
-  "name": "@eigen-labs/agentkit-eigenda",
+  "name": "@layr-labs/agentkit-eigenda",
   "version": "0.1.0",
   "description": "EigenDA adapter for AgentKit providing data availability logging capabilities",
   "main": "dist/index.js",
@@ -11,7 +11,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@eigen-labs/agentkit": "workspace:*",
+    "@layr-labs/agentkit": "workspace:*",
     "eigenda-sdk": "latest"
   },
   "devDependencies": {
@@ -26,6 +26,6 @@
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@eigen-labs/agentkit": "workspace:*"
+    "@layr-labs/agentkit": "workspace:*"
   }
 }

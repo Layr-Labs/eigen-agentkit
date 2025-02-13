@@ -7,9 +7,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@eigen-labs/agentkit": "workspace:*",
-    "@eigen-labs/agentkit-eigenda": "workspace:*",
-    "@eigen-labs/agentkit-opacity": "workspace:*",
+    "@layr-labs/agentkit": "workspace:*",
+    "@layr-labs/agentkit-eigenda": "workspace:*",
+    "@layr-labs/agentkit-opacity": "workspace:*",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {

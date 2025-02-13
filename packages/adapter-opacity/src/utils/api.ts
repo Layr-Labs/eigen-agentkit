@@ -1,4 +1,4 @@
-import { Proof } from '@eigen-labs/agentkit';
+import { Proof } from '@layr-labs/agentkit';
 
 /**
  * Generate a proof for a log ID using the Opacity prover service

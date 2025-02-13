@@ -1,4 +1,4 @@
-import { IDALoggingAdapter, DALogOptions, DALogEntry, DALogStatus } from '@eigen-labs/agentkit';
+import { IDALoggingAdapter, DALogOptions, DALogEntry, DALogStatus } from '@layr-labs/agentkit';
 import { EigenDAClient } from 'eigenda-sdk';
 
 export interface EigenDAAdapterConfig {

@@ -1,4 +1,4 @@
-# @eigen-labs/agentkit
+# @layr-labs/agentkit
 
 A modular and extensible agent framework that provides verifiable AI capabilities and data availability logging. It integrates multiple tools under one roof:
 
@@ -72,7 +72,7 @@ EIGENDA_CREDITS_CONTRACT=0x0CC001F1bDe9cd129092d4d24D935DB985Ce42A9
 ### Verifiable Inference with Opacity
 
 ```typescript
-import { OpacityAdapter } from '@eigen-labs/agentkit-opacity';
+import { OpacityAdapter } from '@layr-labs/agentkit-opacity';
 
 // Initialize adapter
 const opacityAdapter = new OpacityAdapter({
@@ -95,7 +95,7 @@ console.log('Proof is valid:', isValid);
 ### Data Availability Logging with EigenDA
 
 ```typescript
-import { EigenDAAdapter } from '@eigen-labs/agentkit-eigenda';
+import { EigenDAAdapter } from '@layr-labs/agentkit-eigenda';
 
 // Initialize adapter
 const eigenDAAdapter = new EigenDAAdapter({
