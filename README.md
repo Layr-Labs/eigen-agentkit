@@ -13,7 +13,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - 🔒 Verifiable AI inference with zkTLS proofs
 - 📝 Data availability logging with EigenDA
-- 📍 Location verification with Witnesschain (100+ miles)
+- 📍 Real-world actuation and observation with Witnesschain InfinityWatch 
 - 🔑 Verifiable API calls and external data integration
 - ⚡ Composable with existing AI frameworks (LangChain, etc.)
 - 🛠️ Modular adapter system for extensibility
@@ -25,7 +25,7 @@ packages/
   ├── core/            - Core interfaces and types
   ├── adapter-opacity/ - Opacity adapter for verifiable inference
   ├── adapter-eigenda/ - EigenDA adapter for data availability logging
-  ├── adapter-witnesschain/ - Witnesschain adapter for location verification
+  ├── adapter-witnesschain/ - Witnesschain adapter for InfinityWatch
   ├── adapter-reclaim/ - Reclaim adapter for API calls (TBD)
   ├── adapter-formation/ - Formation adapter for code execution (TBD)
   ├── adapter-silence/ - Silence adapter for secret publishing (TBD)
@@ -138,31 +138,7 @@ await eigenDAAdapter.shutdown();
 
 ### Location Verification with Witnesschain
 
-```typescript
-import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
-
-// Initialize adapter
-const witnessAdapter = new WitnesschainAdapter({
-  apiKey: process.env.WITNESSCHAIN_API_KEY!,
-  apiUrl: process.env.WITNESSCHAIN_API_URL,
-  privateKey: process.env.WITNESSCHAIN_PRIVATE_KEY!,
-});
-
-// Verify a location claim
-const result = await witnessAdapter.verifyLocation({
-  latitude: 40.7128,
-  longitude: -74.0060,
-  minDistance: 100, // minimum distance in miles
-  timestamp: Date.now(),
-});
-
-console.log('Verification result:', result);
-console.log('Proof:', result.proof);
-
-// Verify the proof
-const isValid = await witnessAdapter.verifyProof(result.proof);
-console.log('Proof is valid:', isValid);
-```
+TBD
 
 ## Development
 
