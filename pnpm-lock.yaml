@@ -33,37 +33,6 @@ importers:
         specifier: ^5.3.3
         version: 5.7.3
 
-  examples:
-    dependencies:
-      '@layr-labs/agentkit':
-        specifier: ^0.1.0
-        version: 0.1.0
-      '@layr-labs/agentkit-eigenda':
-        specifier: ^0.1.0
-        version: 0.1.0(@layr-labs/agentkit@0.1.0)
-      '@layr-labs/agentkit-opacity':
-        specifier: ^0.1.0
-        version: 0.1.0
-      '@layr-labs/agentkit-witnesschain':
-        specifier: ^0.1.0
-        version: 0.1.0
-      dotenv:
-        specifier: ^16.0.0
-        version: 16.4.7
-    devDependencies:
-      '@types/node':
-        specifier: ^20.17.17
-        version: 20.17.17
-      ts-node:
-        specifier: ^10.9.0
-        version: 10.9.2(@types/node@20.17.17)(typescript@5.7.3)
-      tsconfig-paths:
-        specifier: ^4.2.0
-        version: 4.2.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.7.3
-
   packages/adapter-eigenda:
     dependencies:
       '@layr-labs/agentkit':
@@ -687,20 +656,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
-
-  '@layr-labs/agentkit-eigenda@0.1.0':
-    resolution: {integrity: sha512-jvYzZ93o8TAJyLS7cXTefr05GrPq/luUspSoqOI8YFfpIr2PkcFUqfHeBcm3uV8TI/tq94st1IEXsECOaC4jhw==}
-    peerDependencies:
-      '@layr-labs/agentkit': 0.1.0
-
-  '@layr-labs/agentkit-opacity@0.1.0':
-    resolution: {integrity: sha512-mUExWW/NzgqdM8LzxdCyjNrxMCBg6ckrfh9pibleoxxL+M0sea/wVhPGsYDNo6oDO0HQUKvUyNGaGkAAJp8AyQ==}
-
-  '@layr-labs/agentkit-witnesschain@0.1.0':
-    resolution: {integrity: sha512-3KvqUJi36uMBR+prHtm0OtQ9ZbTvvUfnA35E+Xzmh8GlQl2ooY/bM1S2sUrbLCd7nCTyHu46OyapkdF6C7UYWA==}
-
-  '@layr-labs/agentkit@0.1.0':
-    resolution: {integrity: sha512-I/JLVmWAAOVc7yIQ3O1X58/rlSZ98PojknTOuU3apg43s7fvenyw4VIbbZivUdCL3SJ8g4QvSAs6bxIQkjj12Q==}
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -1926,9 +1881,6 @@ packages:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  minimist@1.2.8:
-    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
-
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -2385,10 +2337,6 @@ packages:
         optional: true
       '@swc/wasm':
         optional: true
-
-  tsconfig-paths@4.2.0:
-    resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
-    engines: {node: '>=6'}
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
@@ -2956,6 +2904,7 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    optional: true
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -3263,33 +3212,7 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
-
-  '@layr-labs/agentkit-eigenda@0.1.0(@layr-labs/agentkit@0.1.0)':
-    dependencies:
-      '@layr-labs/agentkit': 0.1.0
-      eigenda-sdk: 0.1.0
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - utf-8-validate
-
-  '@layr-labs/agentkit-opacity@0.1.0':
-    dependencies:
-      '@layr-labs/agentkit': 0.1.0
-
-  '@layr-labs/agentkit-witnesschain@0.1.0':
-    dependencies:
-      '@layr-labs/agentkit': 0.1.0
-      axios: 1.7.9
-      dotenv: 16.4.7
-      ethers: 6.13.5
-      form-data: 4.0.1
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - utf-8-validate
-
-  '@layr-labs/agentkit@0.1.0': {}
+    optional: true
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -3395,13 +3318,17 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
-  '@tsconfig/node10@1.0.11': {}
+  '@tsconfig/node10@1.0.11':
+    optional: true
 
-  '@tsconfig/node12@1.0.11': {}
+  '@tsconfig/node12@1.0.11':
+    optional: true
 
-  '@tsconfig/node14@1.0.3': {}
+  '@tsconfig/node14@1.0.3':
+    optional: true
 
-  '@tsconfig/node16@1.0.4': {}
+  '@tsconfig/node16@1.0.4':
+    optional: true
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -3628,7 +3555,8 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  arg@4.1.3: {}
+  arg@4.1.3:
+    optional: true
 
   argparse@1.0.10:
     dependencies:
@@ -3821,7 +3749,8 @@ snapshots:
       - supports-color
       - ts-node
 
-  create-require@1.1.1: {}
+  create-require@1.1.1:
+    optional: true
 
   cross-spawn@7.0.6:
     dependencies:
@@ -3851,7 +3780,8 @@ snapshots:
 
   diff-sequences@29.6.3: {}
 
-  diff@4.0.2: {}
+  diff@4.0.2:
+    optional: true
 
   dir-glob@3.0.1:
     dependencies:
@@ -4758,8 +4688,6 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  minimist@1.2.8: {}
-
   minipass@7.1.2: {}
 
   mlly@1.7.4:
@@ -5160,12 +5088,7 @@ snapshots:
       typescript: 5.7.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-
-  tsconfig-paths@4.2.0:
-    dependencies:
-      json5: 2.2.3
-      minimist: 1.2.8
-      strip-bom: 3.0.0
+    optional: true
 
   tslib@2.7.0: {}
 
@@ -5226,7 +5149,8 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  v8-compile-cache-lib@3.0.1: {}
+  v8-compile-cache-lib@3.0.1:
+    optional: true
 
   v8-to-istanbul@9.3.0:
     dependencies:
@@ -5347,7 +5271,8 @@ snapshots:
       y18n: 5.0.8
       yargs-parser: 21.1.1
 
-  yn@3.1.1: {}
+  yn@3.1.1:
+    optional: true
 
   yocto-queue@0.1.0: {}
 

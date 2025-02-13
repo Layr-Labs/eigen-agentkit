@@ -136,9 +136,64 @@ console.log('Retrieved log:', retrievedLog);
 await eigenDAAdapter.shutdown();
 ```
 
-### Location Verification with Witnesschain
+### Real-world Actuation and Observation with Witnesschain InfinityWatch
+The **Witnesschain Adapter** is a TypeScript-based utility that enables an agent to request tasks and observations in the real world. It works in conjunction with the **InfinityWatch app**, which acts as a portal to the physical world.
 
-TBD
+#### **Setup**
+Before using Witnesschain, configure the required environment variables in your `.env` file:
+
+```env
+# Witnesschain Configuration
+WITNESSCHAIN_API_KEY=your_api_key
+WITNESSCHAIN_API_URL=https://api.witnesschain.com
+WITNESSCHAIN_PRIVATE_KEY=your_private_key
+```
+
+#### **Usage**
+
+```typescript
+import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
+
+// Initialize adapter
+const witnesschain = new WitnesschainAdapter();
+
+// Authenticate with Ethereum-compatible wallet
+const isLoggedIn = await witnesschain.login();
+console.log("Login successful:", isLoggedIn);
+
+// Create a new campaign
+const campaign = await witnesschain.createCampaign({
+  campaign: "Urban Pollution Check",
+  description: "Collect images of high-smog areas for air quality analysis.",
+  latitude: 37.7749,
+  longitude: -122.4194,
+  radius: 50, // Radius in kilometers
+  reward_per_task: 5,
+  total_rewards: 100,
+  starts_at: new Date().toISOString(),
+  ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  is_active: true
+});
+
+console.log("Campaign Created:", campaign);
+
+// Fetch geoverified observations
+const observations = await witnesschain.getCampaignPhotos("Urban Pollution Check", null);
+console.log("Received Observations:", observations);
+
+// Classify and accept photos
+const imagePaths = ["smog1.jpg", "smog2.jpg"];
+const task = "Identify high-smog areas";
+
+const classification = await witnesschain.classifyPhotos(imagePaths, task);
+console.log("Classification Result:", classification);
+
+if (classification.success) {
+  await witnesschain.acceptPhoto("smog1.jpg");
+}
+```
+
+
 
 ## Development
 
