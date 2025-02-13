@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import * as ethers from "ethers";
 
 /**
- * Witnesschain Adapter - A class for verifying photos and interacting with the Witnesschain API.
+ * Witnesschain Adapter - A class for classifying photos and interacting with the Witnesschain API.
  */
 export class WitnesschainAdapter {
   private apiUrl: string;
@@ -16,7 +16,7 @@ export class WitnesschainAdapter {
   private cookies;
 
   constructor(
-    apiUrl: string = "http://localhost:8000/verify-photos/",
+    apiUrl: string = "http://localhost:8000/classify-photos/",
     blockchainApiUrl: string = "https://testnet.witnesschain.com/proof/v1/pol",
     privateKey : string = ""
   ) {
@@ -37,12 +37,12 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Verifies a list of images for a given task.
+   * Classifies a list of images for a given task.
    * @param imagePaths Array of image file paths
-   * @param task Task description for verification
+   * @param task Task description for classification
    * @returns API response or null in case of failure
    */
-  async verifyPhotos(imagePaths: string[], task: string): Promise<AxiosResponse | null> {
+  async classifyPhotos(imagePaths: string[], task: string): Promise<AxiosResponse | null> {
     const formData = new FormData();
 
     try {
@@ -189,8 +189,8 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Accepts a photo after verification for rewards 
-   * @returns true/false 
+   * Accepts a photo after classification for rewards
+   * @returns true/false
    */
   async acceptPhoto(photo : string): Promise<boolean> {
     return await this.doPost("accept-photo", {"photo":photo});
