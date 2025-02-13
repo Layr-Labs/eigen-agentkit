@@ -1,70 +1,69 @@
-import { WitnesschainAdapter } from '../src/WitnesschainAdapter';
-import dotenv from 'dotenv';
+import * as wc from '../src/WitnesschainAdapter';
+import * as fs from 'fs';
+import * as path from 'path';
+import axios from 'axios';
+import * as dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
+const witnesschain_client = new wc.WitnesschainAdapter(
+	process.env.WITNESSCHAIN_API_URL,
+	process.env.WITNESSCHAIN_BLOCKCHAIN_API_URL,
+	process.env.WITNESSCHAIN_PRIVATE_KEY
+);
 
-// Helper function to wait
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+async function SLEEP(for_seconds: number)
+{
+	await new Promise((sx) => {setTimeout(sx, for_seconds*1000);});
+}
+
+
+async function downloadImage(url: string, filepath: string): Promise<void> {
+  const response = await axios({
+    url,
+    responseType: 'stream',
+  });
+  return new Promise((resolve, reject) => {
+    const writer = fs.createWriteStream(filepath);
+    response.data.pipe(writer);
+    writer.on('finish', resolve);
+    writer.on('error', reject);
+  });
+}
 
 const LATITUDE		= 10.0;
 const LONGITUDE		= 10.0;
 const MY_CAMPAIGN	= "MyCampaign";
 
-async function main() {
+async function main()
+{
+	const logged_in = await witnesschain_client.authenticate (
+				LATITUDE,
+				LONGITUDE
+	);
 
-  if (! process.env.WITNESSCHAIN_PRIVATE_KEY)
-  {
-	console.error("===> WITNESSCHAIN_PRIVATE_KEY environment variable not defined");
-        process.exit(-1);
-  }
+	let	since		= null;
+	const	analyzed_photos = {};
 
-  // Initialize the Witnesschain adapter
-  const witnesschain = new WitnesschainAdapter(
-    process.env.WITNESSCHAIN_API_URL,
-    process.env.WITNESSCHAIN_BLOCKCHAIN_API_URL,
-    process.env.WITNESSCHAIN_PRIVATE_KEY
-  );
+	if (! logged_in)
+	{
+		console.error("Could not login to witnesschain");
+		return;
+	}
 
-  try {
-    console.log('Initializing Witnesschain adapter...');
+	// Create a campaign if it does not exist
 
-    // Verify images
-    console.log('\nVerifying images...');
-    const imagePaths = ['IMG_1347.jpeg', 'IMG_1348.jpeg'];
-    const task = 'Reduce electricity consumption';
-    const verificationResponse = await witnesschain.verifyPhotos(imagePaths, task);
-    console.log('Verification Response:', verificationResponse?.data);
+	const existing_campaigns	= await witnesschain_client.getCampaigns();
+	const campaign_exist		= existing_campaigns.some((v) => v.id === MY_CAMPAIGN);
 
-    // Authenticate with Witnesschain
-    console.log('\nAuthenticating with Witnesschain...');
-    const authenticated = await witnesschain.authenticate(
-      12.9,
-      77.5
-    );
-    console.log('Authentication successful:', authenticated);
+	if (! campaign_exist)
+	{
+		const start	= new Date();
+		let end		= new Date();
+		end		= new Date(end.setDate(end.getDate() + 10));
 
-    if (authenticated) {
-      // Get balance
-      console.log('\nChecking balance...');
-      const balance = await witnesschain.getBalance();
-      console.log('Current balance:', balance);
+		const starts_at = start.toISOString();
+		const ends_at	= end.toISOString();
 
-      // Fetch campaigns
-      console.log('\nFetching campaigns...');
-      const campaigns = await witnesschain.getCampaigns();
-      console.log('Campaigns:', campaigns);
-
-      const start	= new Date();
-      let end		= new Date();
-      end		= new Date(end.setDate(end.getDate() + 10));
-
-      const starts_at = start.toISOString(); 
-      const ends_at	= end.toISOString();
-
-      // Create a new campaign
-      console.log('\nCreating a new campaign...');
-      const campaignResponse = await witnesschain.createCampaign ({
+		const r = await witnesschain_client.createCampaign ({
 			campaign			: MY_CAMPAIGN,
 			description			: "my-campaign-description",
 			type				: "individual",	// "group", "individual", OR "task"
@@ -83,7 +82,7 @@ async function main() {
 			longitude		: LATITUDE,
 			radius			: 100, // in kms the radius of circle within which the campaign is valid
 
-			banner_url		: "https://www.google.com/x.png",	// images shown to user 
+			banner_url		: "https://www.google.com/x.png",	// images shown to user
 			poster_url		: "https://www.google.com/x.png",
 
 			currency		: "POINTS",	// What currency will be rewarded to participants
@@ -97,13 +96,66 @@ async function main() {
 			max_submissions		: 10000,// Max submissions that this campaign can accept
 
 			is_active		: true	// true makes it immediately available to all users
-	});
+		});
 
-      console.log('Campaign Created:', campaignResponse);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+		if (r.success !== true)
+			console.error("Failed to create a campaign");
+	}
+
+	let photos = [];
+
+	while (true)
+	{
+		if (since)
+			console.log("===> Getting photos since",since);
+
+		try
+		{
+			photos = await witnesschain_client.getCampaignPhotos (
+					MY_CAMPAIGN,
+					since
+			);
+		}
+		catch (e)
+		{
+			console.error(e);
+			photos = [];
+		}
+
+		if (photos.length > 0)
+		{
+			const new_since = (photos as any)[0]?.created_at;
+
+			if (new_since)
+				since = new_since;
+		}
+
+		console.log("Got",photos.length,"photos ...");
+
+		for (const p of photos as any)
+		{
+			if (! analyzed_photos[p.id])
+			{
+				console.log("Analyzing", p.photo_url);
+
+				// Classify p.photo_url
+
+				const filepath = path.join(__dirname, `photo_${p.id}.jpg`);
+				await downloadImage(p.photo_url, filepath);
+				const verified = await witnesschain_client.classifyPhotos([filepath], 'Photo verification task');
+				if (verified)
+				{
+					console.log("Verified");
+					await witnesschain_client.acceptPhoto(p.id);
+				}
+
+				analyzed_photos[p.id] = true;
+			}
+		}
+
+		await SLEEP(5);
+	}
 }
 
-main();
+main()
+	.then(() => console.log("Done"));
