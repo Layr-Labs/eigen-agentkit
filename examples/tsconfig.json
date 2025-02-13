@@ -4,14 +4,11 @@
     "outDir": "./dist",
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": {
-      "@layr-labs/*": ["../packages/*/src"]
-    }
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": ["node"],
+    "resolveJsonModule": true
   },
-  "include": ["./**/*"],
-  "references": [
-    { "path": "../packages/core" },
-    { "path": "../packages/adapter-opacity" },
-    { "path": "../packages/adapter-eigenda" }
-  ]
+  "include": ["./**/*"]
 } 

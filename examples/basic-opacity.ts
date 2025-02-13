@@ -1,5 +1,5 @@
-import { OpacityAdapter, ModelProvider } from '../packages/adapter-opacity/src';
-import { VerifiableInferenceResult } from '../packages/core/src';
+import { OpacityAdapter, ModelProvider } from '@layr-labs/agentkit-opacity';
+import { VerifiableInferenceResult } from '@layr-labs/agentkit';
 import dotenv from 'dotenv';
 
 // Load environment variables

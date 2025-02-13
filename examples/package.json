@@ -7,13 +7,14 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@layr-labs/agentkit": "workspace:*",
-    "@layr-labs/agentkit-eigenda": "workspace:*",
-    "@layr-labs/agentkit-opacity": "workspace:*",
+    "@layr-labs/agentkit": "^0.1.0",
+    "@layr-labs/agentkit-eigenda": "^0.1.0",
+    "@layr-labs/agentkit-opacity": "^0.1.0",
+    "@layr-labs/agentkit-witnesschain": "^0.1.0",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^20.17.17",
     "ts-node": "^10.9.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.0"

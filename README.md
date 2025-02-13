@@ -68,6 +68,11 @@ EIGENDA_PRIVATE_KEY=your_private_key
 EIGENDA_API_URL=https://test-agent-proxy-api.eigenda.xyz
 EIGENDA_BASE_RPC_URL=https://mainnet.base.org
 EIGENDA_CREDITS_CONTRACT=0x0CC001F1bDe9cd129092d4d24D935DB985Ce42A9
+
+# Witnesschain Configuration
+WITNESSCHAIN_API_KEY=your_api_key
+WITNESSCHAIN_API_URL=https://api.witnesschain.com
+WITNESSCHAIN_PRIVATE_KEY=your_private_key
 ```
 
 ## Usage
@@ -129,6 +134,34 @@ console.log('Retrieved log:', retrievedLog);
 
 // Clean up when done
 await eigenDAAdapter.shutdown();
+```
+
+### Location Verification with Witnesschain
+
+```typescript
+import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
+
+// Initialize adapter
+const witnessAdapter = new WitnesschainAdapter({
+  apiKey: process.env.WITNESSCHAIN_API_KEY!,
+  apiUrl: process.env.WITNESSCHAIN_API_URL,
+  privateKey: process.env.WITNESSCHAIN_PRIVATE_KEY!,
+});
+
+// Verify a location claim
+const result = await witnessAdapter.verifyLocation({
+  latitude: 40.7128,
+  longitude: -74.0060,
+  minDistance: 100, // minimum distance in miles
+  timestamp: Date.now(),
+});
+
+console.log('Verification result:', result);
+console.log('Proof:', result.proof);
+
+// Verify the proof
+const isValid = await witnessAdapter.verifyProof(result.proof);
+console.log('Proof is valid:', isValid);
 ```
 
 ## Development

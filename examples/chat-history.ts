@@ -1,5 +1,5 @@
-import { OpacityAdapter } from '../packages/adapter-opacity/src';
-import { EigenDAAdapter } from '../packages/adapter-eigenda/src';
+import { OpacityAdapter } from '@layr-labs/agentkit-opacity';
+import { EigenDAAdapter } from '@layr-labs/agentkit-eigenda';
 import dotenv from 'dotenv';
 
 // Load environment variables

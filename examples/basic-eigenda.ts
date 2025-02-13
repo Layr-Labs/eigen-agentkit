@@ -1,4 +1,4 @@
-import { EigenDAAdapter } from '../packages/adapter-eigenda/src';
+import { EigenDAAdapter } from '@layr-labs/agentkit-eigenda';
 import dotenv from 'dotenv';
 
 // Load environment variables
