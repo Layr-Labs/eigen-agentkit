@@ -5,7 +5,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@eigenlayer/*": ["../packages/*/src"]
+      "@layr-labs/*": ["../packages/*/src"]
     }
   },
   "include": ["./**/*"],

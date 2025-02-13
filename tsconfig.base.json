@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@eigenlayer/*": ["packages/*/src"]
+      "@layr-labs/*": ["packages/*/src"]
     }
   },
   "exclude": ["**/node_modules", "**/dist"]

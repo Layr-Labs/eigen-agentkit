@@ -12,7 +12,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "eigenlayer-agentkit": ["../core/src"]
+      "@layr-labs/agentkit": ["../core/src"]
     }
   },
   "include": ["src/**/*"],

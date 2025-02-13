@@ -1,13 +1,13 @@
-# @eigenlayer/adapter-eigenda
+# @layr-labs/agentkit-eigenda
 
 A simple adapter for storing and retrieving data using EigenDA's data availability solution. Includes a buffered logging system that periodically streams logs to EigenDA.
 
 ## Installation
 
 ```bash
-npm install @eigenlayer/adapter-eigenda
+npm install @layr-labs/agentkit-eigenda
 # or
-pnpm add @eigenlayer/adapter-eigenda
+pnpm add @layr-labs/agentkit-eigenda
 ```
 
 ## Configuration
@@ -28,32 +28,64 @@ EIGENDA_CREDITS_CONTRACT=optional_contract_address  # Optional
 The adapter provides a simple logging interface that buffers logs locally and periodically flushes them to EigenDA:
 
 ```typescript
-import { EigenDAAdapter } from '@eigenlayer/adapter-eigenda';
+import { EigenDAAdapter } from '@layr-labs/agentkit-eigenda';
 
 // Initialize the adapter with custom flush settings
-const adapter = new EigenDAAdapter({
+const eigenda = new EigenDAAdapter({
   privateKey: process.env.EIGENDA_PRIVATE_KEY!,
   apiUrl: process.env.EIGENDA_API_URL,
   rpcUrl: process.env.EIGENDA_RPC_URL,
   creditsContractAddress: process.env.EIGENDA_CREDITS_CONTRACT,
-  flushInterval: 10000, // Flush every 10 seconds (default)
-  maxBufferSize: 1000,  // Maximum logs to buffer before forcing a flush (default)
+  flushInterval: 5000, // Flush every 5 seconds
+  maxBufferSize: 3,  // Maximum logs to buffer before forcing a flush
+  waitForConfirmation: false // Don't wait for confirmation by default
 });
 
 // Initialize the adapter (starts the flush timer)
-await adapter.initialize();
+await eigenda.initialize();
 
 // Log messages with different levels
-adapter.info('Application started', { version: '1.0.0' });
-adapter.warn('Resource usage high', { cpu: 90, memory: 85 });
-adapter.error('Failed to connect', { service: 'database' });
-adapter.debug('Processing request', { requestId: '123' });
+const infoPromise = eigenda.info('Application started', { version: '1.0.0' });
+const warnPromise = eigenda.warn('High CPU usage', { cpu: 85 });
+const errorPromise = eigenda.error('Database connection failed', { 
+  error: 'Connection timeout',
+  retries: 3 
+});
 
-// Logs are automatically flushed to EigenDA every 10 seconds
-// or when the buffer reaches maxBufferSize
+// Structured logging with tags
+const structuredPromise = eigenda.log({
+  event: 'user_login',
+  userId: '123',
+  timestamp: new Date().toISOString(),
+  success: true,
+  details: {
+    ip: '192.168.1.1',
+    userAgent: 'Mozilla/5.0',
+    region: 'US-East'
+  }
+}, {
+  level: 'info',
+  tags: ['auth', 'security']
+});
 
-// When shutting down your application, make sure to flush remaining logs
-await adapter.shutdown();
+// Get log IDs when they become available
+const [infoLog, warnLog, errorLog, structuredLog] = await Promise.all([
+  infoPromise, warnPromise, errorPromise, structuredPromise
+]);
+
+console.log('Log IDs:', {
+  info: infoLog.id,
+  warn: warnLog.id,
+  error: errorLog.id,
+  structured: structuredLog.id
+});
+
+// Check balance
+const balance = await eigenda.getBalance();
+console.log('Current balance:', balance);
+
+// Clean up when done
+await eigenda.shutdown();
 ```
 
 ### Direct Data Storage
@@ -108,6 +140,7 @@ constructor(config: {
   creditsContractAddress?: string;
   flushInterval?: number;     // How often to flush logs (in ms), default: 10000
   maxBufferSize?: number;     // Max logs to buffer before forcing flush, default: 1000
+  waitForConfirmation?: boolean; // Don't wait for confirmation by default
 })
 ```
 
@@ -138,6 +171,11 @@ constructor(config: {
 - `initialize(minBalance?: number): Promise<void>`
   - Initializes the adapter and starts the flush timer
   - `minBalance` defaults to 0.001 ETH
+  - Creates or retrieves an identifier for the adapter
+
+- `getBalance(): Promise<number>`
+  - Get the current balance for the adapter's identifier
+  - Returns the balance in ETH
 
 - `post(data: unknown, options?: PostOptions): Promise<PostResult>`
   - Posts data to EigenDA directly
@@ -153,6 +191,12 @@ constructor(config: {
 - `get(jobId: string): Promise<unknown | null>`
   - Retrieves previously posted data
   - Returns the data if found, null otherwise
+
+- `getIdentifier(): Uint8Array | undefined`
+  - Get the current identifier being used by the adapter
+
+- `getIdentifierHex(): string | undefined`
+  - Get the hex string representation of the current identifier
 
 ## Error Handling
 

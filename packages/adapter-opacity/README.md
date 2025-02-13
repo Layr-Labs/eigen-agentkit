@@ -1,15 +1,15 @@
-# @eigenlayer/adapter-opacity
+# @layr-labs/agentkit-opacity
 
 Opacity adapter for verifiable inference in EigenLayer AgentKit. This adapter integrates with Cloudflare's AI Gateway and Opacity's zkTLS proof system to provide verifiable AI inference capabilities.
 
 ## Installation
 
 ```bash
-npm install @eigenlayer/adapter-opacity
+npm install @layr-labs/agentkit-opacity
 # or
-yarn add @eigenlayer/adapter-opacity
+yarn add @layr-labs/agentkit-opacity
 # or
-pnpm add @eigenlayer/adapter-opacity
+pnpm add @layr-labs/agentkit-opacity
 ```
 
 ## Features
@@ -24,7 +24,7 @@ pnpm add @eigenlayer/adapter-opacity
 ## Usage
 
 ```typescript
-import { OpacityAdapter, ModelProvider, ChatMessage } from '@eigenlayer/adapter-opacity';
+import { OpacityAdapter, ModelProvider, ChatMessage } from '@layr-labs/agentkit-opacity';
 
 // Initialize the adapter
 const adapter = new OpacityAdapter({
@@ -120,7 +120,7 @@ When calling `generateText`, you can customize the model behavior:
 
 ```typescript
 interface GenerateTextOptions {
-  model?: string;                // Model name (e.g., 'gpt-4o', 'claude-3-5-sonnet-20241022')
+  model?: string;                // Model name (e.g., 'gpt-4oo', 'claude-3-5-sonnet-20241022')
   temperature?: number;          // Controls randomness (0-1)
   maxTokens?: number;           // Maximum tokens to generate
   systemPrompt?: string;        // System prompt for single-prompt generation
