@@ -4,7 +4,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - Opacity for verifiable inference
 - EigenDA for data availability logging
-- Witnesschain for proof of location verification (100+ miles)
+- WitnessChain for Real-world actuation and observation 
 - Reclaim for verifiable API calls (TBD)
 - Formation for verifiable code execution (TBD)
 - Silence for secret publishing (TBD)
@@ -13,7 +13,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - 🔒 Verifiable AI inference with zkTLS proofs
 - 📝 Data availability logging with EigenDA
-- 📍 Location verification with Witnesschain (100+ miles)
+- 📍 Real-world actuation and observation with Witnesschain InfinityWatch 
 - 🔑 Verifiable API calls and external data integration
 - ⚡ Composable with existing AI frameworks (LangChain, etc.)
 - 🛠️ Modular adapter system for extensibility
@@ -25,7 +25,7 @@ packages/
   ├── core/            - Core interfaces and types
   ├── adapter-opacity/ - Opacity adapter for verifiable inference
   ├── adapter-eigenda/ - EigenDA adapter for data availability logging
-  ├── adapter-witnesschain/ - Witnesschain adapter for location verification
+  ├── adapter-witnesschain/ - Witnesschain adapter for InfinityWatch
   ├── adapter-reclaim/ - Reclaim adapter for API calls (TBD)
   ├── adapter-formation/ - Formation adapter for code execution (TBD)
   ├── adapter-silence/ - Silence adapter for secret publishing (TBD)
@@ -136,33 +136,54 @@ console.log('Retrieved log:', retrievedLog);
 await eigenDAAdapter.shutdown();
 ```
 
-### Location Verification with Witnesschain
+### Real-world Actuation and Observation with Witnesschain InfinityWatch
+The **Witnesschain Adapter** is a TypeScript-based utility that enables an agent to request tasks and observations in the real world. It works in conjunction with the **InfinityWatch app**, which acts as a portal to the physical world.
+
+#### **Usage**
 
 ```typescript
 import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
 
 // Initialize adapter
-const witnessAdapter = new WitnesschainAdapter({
-  apiKey: process.env.WITNESSCHAIN_API_KEY!,
-  apiUrl: process.env.WITNESSCHAIN_API_URL,
-  privateKey: process.env.WITNESSCHAIN_PRIVATE_KEY!,
+const witnesschain = new WitnesschainAdapter();
+
+// Authenticate with Ethereum-compatible wallet
+const isLoggedIn = await witnesschain.login();
+console.log("Login successful:", isLoggedIn);
+
+// Create a new campaign
+const campaign = await witnesschain.createCampaign({
+  campaign: "Urban Pollution Check",
+  description: "Collect images of high-smog areas for air quality analysis.",
+  latitude: 37.7749,
+  longitude: -122.4194,
+  radius: 50, // Radius in kilometers
+  reward_per_task: 5,
+  total_rewards: 100,
+  starts_at: new Date().toISOString(),
+  ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  is_active: true
 });
 
-// Verify a location claim
-const result = await witnessAdapter.verifyLocation({
-  latitude: 40.7128,
-  longitude: -74.0060,
-  minDistance: 100, // minimum distance in miles
-  timestamp: Date.now(),
-});
+console.log("Campaign Created:", campaign);
 
-console.log('Verification result:', result);
-console.log('Proof:', result.proof);
+// Fetch geoverified observations
+const observations = await witnesschain.getCampaignPhotos("Urban Pollution Check", null);
+console.log("Received Observations:", observations);
 
-// Verify the proof
-const isValid = await witnessAdapter.verifyProof(result.proof);
-console.log('Proof is valid:', isValid);
+// Classify and accept photos
+const imagePaths = ["smog1.jpg", "smog2.jpg"];
+const task = "Identify high-smog areas";
+
+const classification = await witnesschain.classifyPhotos(imagePaths, task);
+console.log("Classification Result:", classification);
+
+if (classification.success) {
+  await witnesschain.acceptPhoto("smog1.jpg");
+}
 ```
+
+
 
 ## Development
 
