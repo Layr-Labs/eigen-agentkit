@@ -35,10 +35,7 @@ const MY_CAMPAIGN	= "MyCampaign";
 
 async function main()
 {
-	const logged_in = await witnesschain_client.authenticate (
-				LATITUDE,
-				LONGITUDE
-	);
+	const logged_in = await witnesschain_client.login ();
 
 	let	since		= null;
 	const	analyzed_photos = {};
