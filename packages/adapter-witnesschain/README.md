@@ -44,7 +44,7 @@ import { WitnesschainAdapter } from "witnesschain-adapter";
 const adapter = new WitnesschainAdapter();
 ```
 
-### **Authenticate with Ethereum Wallet**
+### **Login with Ethereum compatible Wallet**
 ```sh
 export WITNESSCHAIN_PRIVATE_KEY="<Your-Private-Key>"
 ```
