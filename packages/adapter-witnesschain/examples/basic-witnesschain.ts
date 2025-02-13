@@ -29,16 +29,13 @@ async function downloadImage(url: string, filepath: string): Promise<void> {
   });
 }
 
-const LATITUDE		= 10.0;
-const LONGITUDE		= 10.0;
-const MY_CAMPAIGN	= "MyCampaign";
+const CAMPAIGN_LATITUDE		= 10.0;
+const CAMPAIGN_LONGITUDE	= 10.0;
+const MY_CAMPAIGN		= "MyCampaign";
 
 async function main()
 {
-	const logged_in = await witnesschain_client.authenticate (
-				LATITUDE,
-				LONGITUDE
-	);
+	const logged_in = await witnesschain_client.authenticate ();
 
 	let	since		= null;
 	const	analyzed_photos = {};
@@ -78,8 +75,8 @@ async function main()
 			],
 
 			// lat, long, and radius is not mandatory
-			latitude		: LONGITUDE,
-			longitude		: LATITUDE,
+			latitude		: CAMPAIGN_LATITUDE,
+			longitude		: CAMPAIGN_LONGITUDE,
 			radius			: 100, // in kms the radius of circle within which the campaign is valid
 
 			banner_url		: "https://www.google.com/x.png",	// images shown to user

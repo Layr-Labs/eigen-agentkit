@@ -141,7 +141,7 @@ export class WitnesschainAdapter {
    * @param longitude User longitude
    * @returns True if authentication is successful, otherwise false
    */
-  async authenticate(latitude: number, longitude: number): Promise<boolean> {
+  async login(): Promise<boolean> {
 
     if (! this.wallet)
        return false;
@@ -153,8 +153,8 @@ export class WitnesschainAdapter {
       publicKey: address,
       clientVersion: "9999999999",
       walletPublicKey: { ethereum: address },
-      role: "prover",
-      claims: { latitude, longitude },
+      role: "payer",
+      claims: {},
     });
 
     if (!preLoginResponse) return false;
