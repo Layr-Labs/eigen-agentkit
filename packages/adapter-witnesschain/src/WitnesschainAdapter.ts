@@ -7,7 +7,7 @@ import FormData from 'form-data';
 import * as ethers from "ethers";
 
 /**
- * Witnesschain Adapter - A class for classifying photos and interacting with the Witnesschain API.
+ * Witnesschain Adapter - A class for interacting with the Witnesschain API to request and receive geoverified real-world observations via InfinityWatch.
  */
 export class WitnesschainAdapter {
   private apiUrl: string;
@@ -177,7 +177,7 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Fetches the list of available campaigns from Witnesschain.
+   * Fetches the list of available campaigns from Witnesschain. Campaigns are a way to request real-world observations (or actions). 
    * @returns List of campaigns
    */
   async getCampaigns(): Promise<any> {
@@ -197,7 +197,7 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Fetches the list of photos from a campaign from Witnesschain.
+   * Fetches the list of geoverified photos from a campaign from Witnesschain.
    * @returns List of photos
    */
   async getCampaignPhotos(campaign : string, since : string | null): Promise<any> {
@@ -205,14 +205,14 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Creates a new campaign on Witnesschain.
+   * Creates a new campaign on Witnesschain. Campaigns will appear on the InfinityWatch app for users at the selected location.
    * @param privateKey Ethereum private key
    * @param campaignName Campaign name
-   * @param description Campaign description
+   * @param description Campaign description - describe what task you want Campaign participants to do. 
    * @param createdBy Creator’s name or handle
    * @param latitude Campaign latitude
    * @param longitude Campaign longitude
-   * @param radius Campaign radius (in km)
+   * @param radius Campaign radius (in km) - the area over which the campaign will be valid 
    * @param totalRewards Total reward pool
    * @param rewardPerTask Reward per completed task
    * @param fuelRequired Fuel needed for participation
