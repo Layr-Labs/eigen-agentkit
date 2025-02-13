@@ -1,5 +1,5 @@
 {
-  "name": "@eigenlayer/agentkit-examples",
+  "name": "agentkit-examples",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,9 +7,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@eigenlayer/agentkit": "workspace:*",
-    "@eigenlayer/agentkit-eigenda": "workspace:*",
-    "@eigenlayer/agentkit-opacity": "workspace:*",
+    "eigenlayer-agentkit": "workspace:*",
+    "agentkit-eigenda": "workspace:*",
+    "agentkit-opacity": "workspace:*",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {

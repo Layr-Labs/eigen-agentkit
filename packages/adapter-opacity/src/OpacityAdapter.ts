@@ -9,7 +9,7 @@ import {
   ProofGenerationError,
   ProofVerificationError,
   Proof
-} from '@eigenlayer/agentkit';
+} from 'eigenlayer-agentkit';
 import { ModelProvider, OpacityAdapterConfig, ModelConfig, ChatMessage } from './types';
 import { generateProof, verifyProof } from './utils/api';
 
