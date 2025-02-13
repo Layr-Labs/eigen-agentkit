@@ -4,6 +4,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - Opacity for verifiable inference
 - EigenDA for data availability logging
+- Witnesschain for proof of location verification (100+ miles)
 - Reclaim for verifiable API calls (TBD)
 - Formation for verifiable code execution (TBD)
 - Silence for secret publishing (TBD)
@@ -12,6 +13,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - 🔒 Verifiable AI inference with zkTLS proofs
 - 📝 Data availability logging with EigenDA
+- 📍 Location verification with Witnesschain (100+ miles)
 - 🔑 Verifiable API calls and external data integration
 - ⚡ Composable with existing AI frameworks (LangChain, etc.)
 - 🛠️ Modular adapter system for extensibility
@@ -23,6 +25,7 @@ packages/
   ├── core/            - Core interfaces and types
   ├── adapter-opacity/ - Opacity adapter for verifiable inference
   ├── adapter-eigenda/ - EigenDA adapter for data availability logging
+  ├── adapter-witnesschain/ - Witnesschain adapter for location verification
   ├── adapter-reclaim/ - Reclaim adapter for API calls (TBD)
   ├── adapter-formation/ - Formation adapter for code execution (TBD)
   ├── adapter-silence/ - Silence adapter for secret publishing (TBD)

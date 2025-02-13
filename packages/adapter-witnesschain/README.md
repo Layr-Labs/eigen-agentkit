@@ -1,192 +1,166 @@
-# Witnesschain Adapter
+# @layr-labs/agentkit-witnesschain
 
 ## 📌 Overview
 The **Witnesschain Adapter** is a TypeScript-based utility that enables image verification and blockchain-based campaign creation by sending requests to an API. It handles file uploads using `axios` and `form-data`, and integrates Ethereum-based authentication using `ethers`.
 
-## 🚀 Features
-- 📷 Upload multiple images for verification
-- ⚡ Uses `axios` for efficient HTTP requests
-- 💤 Handles file streams properly to prevent memory overload
-- 🛠️ TypeScript support for better development experience
-- 🔑 Ethereum-based authentication using private keys
-- 🏛️ Create and manage blockchain campaigns
+## Installation
 
-## 🛠️ Usage
-
-### **Import and Initialize the Adapter**
-```typescript
-import { WitnesschainAdapter } from "witnesschain-adapter";
-
-const adapter = new WitnesschainAdapter();
+```bash
+npm install @layr-labs/agentkit-witnesschain
+# or
+yarn add @layr-labs/agentkit-witnesschain
+# or
+pnpm add @layr-labs/agentkit-witnesschain
 ```
 
-### **Authenticate with Ethereum Wallet**
-```sh
-export WITNESSCHAIN_PRIVATE_KEY="<Your-Private-Key>"
+## Features
+
+- 📍 Verify location claims with 100+ mile accuracy
+- 🌍 Global coverage through decentralized witness network
+- ⛓️ Blockchain-based verification for trustless operation
+- 🔒 Privacy-preserving location proofs
+- ⚡ Fast and efficient verification process
+
+## Configuration
+
+### Environment Variables
+
+```env
+WITNESSCHAIN_API_KEY=your_api_key
+WITNESSCHAIN_API_URL=https://api.witnesschain.com  # Optional: defaults to mainnet
+WITNESSCHAIN_PRIVATE_KEY=your_private_key  # For submitting proofs
 ```
 
+### Basic Usage
+
 ```typescript
-const privateKey = process.env.WITNESSCHAIN_PRIVATE_KEY; 
-const latitude = 12.9;
-const longitude = 77.5;
+import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
 
-const logged_in = await adapter.authenticate(privateKey, latitude, longitude);
-```
-
-### **Create a Blockchain Campaign**
-```typescript
-const r = await witnesschain_client.createCampaign ({
-	campaign			: MY_CAMPAIGN,
-	description			: "my-campaign-description",
-	type				: "individual",	// "group", "individual", OR "task"
-
-	// ---- Group campaigns may require 2 values ---
-	// location_limit_in_meters	: 100,		// how far can people in a group can be
-	// time_limit_in_minutes	: 60,		// how long the referral link is valid
-
-	tags			: [
-		"campaign",
-		"tags"
-	],
-
-	// lat, long, and radius is not mandatory
-	latitude		: LONGITUDE,
-	longitude		: LATITUDE,
-	radius			: 100, // in kms the radius of circle within which the campaign is valid
-
-	banner_url		: "https://www.google.com/x.png",	// images shown to user 
-	poster_url		: "https://www.google.com/x.png",
-
-	currency		: "POINTS",	// What currency will be rewarded to participants
-	total_rewards		: 10.0,		// The MAX/total rewards the campaign can give
-	reward_per_task		: 2.0,		// rewards per task
-	fuel_required		: 1.0,		// Fuel that will be spent by the user for this task
-
-	starts_at		: starts_at,	//  When campaign starts and ends
-	ends_at			: ends_at,
-
-	max_submissions		: 10000,// Max submissions that this campaign can accept
-
-	is_active		: true	// true makes it immediately available to all users
+// Initialize the adapter
+const adapter = new WitnesschainAdapter({
+  apiKey: process.env.WITNESSCHAIN_API_KEY!,
+  apiUrl: process.env.WITNESSCHAIN_API_URL,
+  privateKey: process.env.WITNESSCHAIN_PRIVATE_KEY!,
 });
+
+// Verify a location claim
+const result = await adapter.verifyLocation({
+  latitude: 40.7128,
+  longitude: -74.0060,
+  minDistance: 100, // minimum distance in miles
+  timestamp: Date.now(),
+});
+
+console.log('Verification result:', result);
+console.log('Proof:', result.proof);
+
+// Verify the proof
+const isValid = await adapter.verifyProof(result.proof);
+console.log('Proof is valid:', isValid);
 ```
 
-### **Example scripts**
-```
-cd adapter-witnesschain
-export WITNESSCHAIN_PRIVATE_KEY="<Your-Private-Key>"
-npm install
-npm run build
-node dist/examples/campaign.js
-```
-
-
-### **Verify Images**
-To verify a set of images for a specific task:
+### Advanced Usage
 
 ```typescript
-const imagePaths = ["IMG_1347.jpeg", "IMG_1348.jpeg"];
-const task = "Reduce electricity consumption";
+// Request location verification with specific parameters
+const verification = await adapter.requestVerification({
+  latitude: 40.7128,
+  longitude: -74.0060,
+  minDistance: 150, // increased minimum distance
+  maxWitnesses: 5, // number of witnesses to use
+  timeout: 3600, // timeout in seconds
+  requireProof: true, // require cryptographic proof
+});
 
-adapter.verifyPhotos(imagePaths, task)
-  .then(response => {
-    console.log("Verification Response:", response.data);
-  })
-  .catch(error => {
-    console.error("Error verifying photos:", error);
-  });
+// Check verification status
+const status = await adapter.checkVerificationStatus(verification.id);
+
+// Get verification details
+const details = await adapter.getVerificationDetails(verification.id);
 ```
 
----
+## API Reference
 
-## 📚 Class Documentation
+### `WitnesschainAdapter`
 
-### **`WitnesschainAdapter`**
-The main adapter class for verifying images and interacting with the blockchain.
+#### Constructor Options
 
-#### **Constructor**
 ```typescript
-constructor(apiUrl: string = "http://localhost:8000/verify-photos/", blockchainApiUrl: string = "https://testnet.witnesschain.com/proof/v1/pol")
-```
-- **`apiUrl`** *(optional)*: The endpoint to send image verification requests (default: `http://localhost:8000/verify-photos/`).
-- **`blockchainApiUrl`** *(optional)*: The Witnesschain blockchain API endpoint (default: `https://testnet.witnesschain.com/proof/v1/pol`).
-
-#### **Method: `authenticate(privateKey: string, latitude: number, longitude: number)`**
-```typescript
-authenticate(privateKey: string, latitude: number, longitude: number): Promise<boolean>
-```
-- **`privateKey`** *(string)*: The Ethereum private key for authentication.
-- **`latitude`**, **`longitude`** *(number)*: User’s geographical location.
-- **Returns**: `Promise<boolean>` – `true` if authentication is successful, `false` otherwise.
-
-#### **Method: `createCampaign(...)`**
-```typescript
-createCampaign(privateKey: string, campaignName: string, description: string, createdBy: string, latitude: number, longitude: number, radius: number, totalRewards: number, rewardPerTask: number, fuelRequired: number): Promise<any>
-```
-- **Parameters**: Customizable campaign details.
-- **Returns**: Campaign creation response.
-
-#### **Method: `verifyPhotos(imagePaths: string[], task: string)`**
-```typescript
-verifyPhotos(imagePaths: string[], task: string): Promise<AxiosResponse | null>
-```
-- **`imagePaths`** *(string array)*: Paths to images that need verification.
-- **`task`** *(string)*: The task description (e.g., `"Reduce electricity consumption"`).
-- **Returns**: `Promise<AxiosResponse | null>` – API response or `null` if an error occurs.
-
----
-
-## 📺 Project Structure
-```
-witnesschain-adapter/
-├── src/
-│   ├── index.ts
-│   ├── WitnesschainAdapter.ts
-├── dist/               # Compiled JavaScript files
-├── package.json
-├── tsconfig.json       # TypeScript configuration
-├── .gitignore
-├── README.md
-```
-
----
-
-## ❓ Troubleshooting
-### **1. TypeScript Error: `esModuleInterop`**
-If you see this error:
-```
-Module 'form-data' can only be default-imported using the 'esModuleInterop' flag
-```
-Enable **`esModuleInterop`** in `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "esModuleInterop": true
-  }
+interface WitnesschainConfig {
+  apiKey: string;
+  apiUrl?: string;
+  privateKey: string;
+  defaultTimeout?: number;
+  defaultMinDistance?: number;
+  defaultMaxWitnesses?: number;
 }
 ```
-Then recompile:
-```sh
-npm install
-npm run build
+
+#### Methods
+
+- `verifyLocation(params: LocationParams): Promise<VerificationResult>`
+  - Verify a location claim
+  - Returns verification result with proof
+
+- `requestVerification(params: VerificationParams): Promise<VerificationRequest>`
+  - Request a new location verification
+  - More configurable than `verifyLocation`
+
+- `checkVerificationStatus(id: string): Promise<VerificationStatus>`
+  - Check the status of a verification request
+
+- `getVerificationDetails(id: string): Promise<VerificationDetails>`
+  - Get detailed information about a verification
+
+- `verifyProof(proof: LocationProof): Promise<boolean>`
+  - Verify a location proof
+  - Returns true if the proof is valid
+
+## Types
+
+```typescript
+interface LocationParams {
+  latitude: number;
+  longitude: number;
+  minDistance: number;
+  timestamp: number;
+}
+
+interface VerificationResult {
+  success: boolean;
+  proof: LocationProof;
+  witnesses: number;
+  timestamp: number;
+}
+
+interface LocationProof {
+  type: 'witnesschain';
+  data: {
+    location: {
+      latitude: number;
+      longitude: number;
+    };
+    witnesses: string[];
+    signatures: string[];
+    timestamp: number;
+  };
+}
 ```
 
-### **2. Missing Dependencies**
-Ensure all dependencies are installed:
-```sh
-npm install
-```
+## Error Handling
 
----
+The adapter throws the following error types:
+- `VerificationError`: When location verification fails
+- `ProofGenerationError`: When proof generation fails
+- `ProofVerificationError`: When proof verification fails
+- `NetworkError`: When API communication fails
+- `ConfigurationError`: When adapter is misconfigured
 
-## 💜 License
-This project is licensed under the **MIT License**.
+## Contributing
 
----
+Please read the contributing guidelines in the root of the monorepo for details on our code of conduct and the process for submitting pull requests.
 
-## 👨‍💻 Author
-Developed by **Witnesschain**.
+## License
 
-For inquiries or contributions, feel free to open an issue! 🚀
+MIT License - see the LICENSE file for details.
 
