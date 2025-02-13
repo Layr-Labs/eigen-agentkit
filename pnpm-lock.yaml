@@ -35,7 +35,7 @@ importers:
 
   packages/adapter-eigenda:
     dependencies:
-      '@eigen-labs/agentkit':
+      '@layr-labs/agentkit':
         specifier: workspace:*
         version: link:../core
       eigenda-sdk:
@@ -72,7 +72,7 @@ importers:
 
   packages/adapter-opacity:
     dependencies:
-      '@eigen-labs/agentkit':
+      '@layr-labs/agentkit':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -100,7 +100,7 @@ importers:
 
   packages/adapter-witnesschain:
     dependencies:
-      '@eigen-labs/agentkit':
+      '@layr-labs/agentkit':
         specifier: workspace:*
         version: link:../core
       axios:
