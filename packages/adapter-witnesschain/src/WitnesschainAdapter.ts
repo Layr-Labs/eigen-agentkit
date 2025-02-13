@@ -135,11 +135,9 @@ export class WitnesschainAdapter {
   }
 
   /**
-   * Logs into Witnesschain using an Ethereum wallet signature.
+   * Logs into Witnesschain using an Ethereum compatible wallet signature.
    * @param privateKey Ethereum private key
-   * @param latitude User latitude
-   * @param longitude User longitude
-   * @returns True if authentication is successful, otherwise false
+   * @returns True if login is successful, otherwise false
    */
   async login(): Promise<boolean> {
 
