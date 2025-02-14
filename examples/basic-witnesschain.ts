@@ -78,8 +78,8 @@ async function main()
 
 			// lat, long, and radius is not mandatory, but highly recommended 
 			// Please select your lat-long for campaigns to appear in the InfinityWatch app near you
-			latitude		: LONGITUDE,
-			longitude		: LATITUDE,
+			latitude		: LATITUDE,
+			longitude		: LONGITUDE,
 			radius			: 100, // in kms the radius of circle within which the campaign is valid
 
 			banner_url		: "https://www.google.com/x.png",	// images shown to user
