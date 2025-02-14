@@ -35,10 +35,7 @@ const MY_CAMPAIGN	= "MyCampaign";
 
 async function main()
 {
-	const logged_in = await witnesschain_client.authenticate (
-				LATITUDE,
-				LONGITUDE
-	);
+	const logged_in = await witnesschain_client.login ();
 
 	let	since		= null;
 	const	analyzed_photos = {};
@@ -60,7 +57,7 @@ async function main()
 		let end		= new Date();
 		end		= new Date(end.setDate(end.getDate() + 10));
 
-		const starts_at = start.toISOString(); 
+		const starts_at = start.toISOString();
 		const ends_at	= end.toISOString();
 
 		const r = await witnesschain_client.createCampaign ({
@@ -68,6 +65,8 @@ async function main()
 			description			: "my-campaign-description",
 			type				: "individual",	// "group", "individual", OR "task"
 
+			// Individual campaigns allow app users to perform one action at a time
+			// Only "individual" campaigns are enabled at this point
 			// ---- Group campaigns may require 2 values ---
 			// location_limit_in_meters	: 100,		// how far can people in a group can be
 			// time_limit_in_minutes	: 60,		// how long the referral link is valid
@@ -77,18 +76,19 @@ async function main()
 				"tags"
 			],
 
-			// lat, long, and radius is not mandatory
+			// lat, long, and radius is not mandatory, but highly recommended 
+			// Please select your lat-long for campaigns to appear in the InfinityWatch app near you
 			latitude		: LONGITUDE,
 			longitude		: LATITUDE,
 			radius			: 100, // in kms the radius of circle within which the campaign is valid
 
-			banner_url		: "https://www.google.com/x.png",	// images shown to user 
+			banner_url		: "https://www.google.com/x.png",	// images shown to user
 			poster_url		: "https://www.google.com/x.png",
 
-			currency		: "POINTS",	// What currency will be rewarded to participants
+			currency		: "POINTS",	// What currency will be rewarded to participants, we only allow virtual in-app "POINTS" at this moment
 			total_rewards		: 10.0,		// The MAX/total rewards the campaign can give
 			reward_per_task		: 2.0,		// rewards per task
-			fuel_required		: 1.0,		// Fuel that will be spent by the user for this task
+			fuel_required		: 1.0,		// Fuel that will be spent by the user for this task (recommended to set it to 1)
 
 			starts_at		: starts_at,	//  When campaign starts and ends
 			ends_at			: ends_at,
@@ -109,7 +109,7 @@ async function main()
 		if (since)
 			console.log("===> Getting photos since",since);
 
-		try
+		try // Receive geo-verified photos taken from InfinityWatch 
 		{
 			photos = await witnesschain_client.getCampaignPhotos (
 					MY_CAMPAIGN,
@@ -137,12 +137,12 @@ async function main()
 			if (! analyzed_photos[p.id])
 			{
 				console.log("Analyzing", p.photo_url);
-			
-				// Verify p.photo_url
+
+				// Classify p.photo_url
 
 				const filepath = path.join(__dirname, `photo_${p.id}.jpg`);
 				await downloadImage(p.photo_url, filepath);
-				const verified = await witnesschain_client.verifyPhotos([filepath], 'Photo verification task');
+				const verified = await witnesschain_client.classifyPhotos([filepath], 'Photo verification task');
 				if (verified)
 				{
 					console.log("Verified");

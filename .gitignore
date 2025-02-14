@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+*./node_modules
 
 # Build outputs
 dist/

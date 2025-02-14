@@ -4,7 +4,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - Opacity for verifiable inference
 - EigenDA for data availability logging
-- Witnesschain for proof of location verification (100+ miles)
+- WitnessChain for Real-world actuation and observation 
 - Reclaim for verifiable API calls (TBD)
 - Formation for verifiable code execution (TBD)
 - Silence for secret publishing (TBD)
@@ -13,7 +13,7 @@ A modular and extensible agent framework that provides verifiable AI capabilitie
 
 - 🔒 Verifiable AI inference with zkTLS proofs
 - 📝 Data availability logging with EigenDA
-- 📍 Location verification with Witnesschain (100+ miles)
+- 📍 Real-world actuation and observation with Witnesschain InfinityWatch 
 - 🔑 Verifiable API calls and external data integration
 - ⚡ Composable with existing AI frameworks (LangChain, etc.)
 - 🛠️ Modular adapter system for extensibility
@@ -25,7 +25,7 @@ packages/
   ├── core/            - Core interfaces and types
   ├── adapter-opacity/ - Opacity adapter for verifiable inference
   ├── adapter-eigenda/ - EigenDA adapter for data availability logging
-  ├── adapter-witnesschain/ - Witnesschain adapter for location verification
+  ├── adapter-witnesschain/ - Witnesschain adapter for InfinityWatch
   ├── adapter-reclaim/ - Reclaim adapter for API calls (TBD)
   ├── adapter-formation/ - Formation adapter for code execution (TBD)
   ├── adapter-silence/ - Silence adapter for secret publishing (TBD)
@@ -68,6 +68,11 @@ EIGENDA_PRIVATE_KEY=your_private_key
 EIGENDA_API_URL=https://test-agent-proxy-api.eigenda.xyz
 EIGENDA_BASE_RPC_URL=https://mainnet.base.org
 EIGENDA_CREDITS_CONTRACT=0x0CC001F1bDe9cd129092d4d24D935DB985Ce42A9
+
+# Witnesschain Configuration
+WITNESSCHAIN_API_KEY=your_api_key
+WITNESSCHAIN_API_URL=https://api.witnesschain.com
+WITNESSCHAIN_PRIVATE_KEY=your_private_key
 ```
 
 ## Usage
@@ -130,6 +135,55 @@ console.log('Retrieved log:', retrievedLog);
 // Clean up when done
 await eigenDAAdapter.shutdown();
 ```
+
+### Real-world Actuation and Observation with Witnesschain InfinityWatch
+The **Witnesschain Adapter** is a TypeScript-based utility that enables an agent to request tasks and observations in the real world. It works in conjunction with the **InfinityWatch app**, which acts as a portal to the physical world.
+
+#### **Usage**
+
+```typescript
+import { WitnesschainAdapter } from '@layr-labs/agentkit-witnesschain';
+
+// Initialize adapter
+const witnesschain = new WitnesschainAdapter();
+
+// Authenticate with Ethereum-compatible wallet
+const isLoggedIn = await witnesschain.login();
+console.log("Login successful:", isLoggedIn);
+
+// Create a new campaign
+const campaign = await witnesschain.createCampaign({
+  campaign: "Urban Pollution Check",
+  description: "Collect images of high-smog areas for air quality analysis.",
+  latitude: 37.7749,
+  longitude: -122.4194,
+  radius: 50, // Radius in kilometers
+  reward_per_task: 5,
+  total_rewards: 100,
+  starts_at: new Date().toISOString(),
+  ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  is_active: true
+});
+
+console.log("Campaign Created:", campaign);
+
+// Fetch geoverified observations
+const observations = await witnesschain.getCampaignPhotos("Urban Pollution Check", null);
+console.log("Received Observations:", observations);
+
+// Classify and accept photos
+const imagePaths = ["smog1.jpg", "smog2.jpg"];
+const task = "Identify high-smog areas";
+
+const classification = await witnesschain.classifyPhotos(imagePaths, task);
+console.log("Classification Result:", classification);
+
+if (classification.success) {
+  await witnesschain.acceptPhoto("smog1.jpg");
+}
+```
+
+
 
 ## Development
 

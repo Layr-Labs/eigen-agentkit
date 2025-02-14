@@ -1,1 +1,1 @@
-export * from "./WitnesschainAdapter";
+export * from './WitnesschainAdapter';
