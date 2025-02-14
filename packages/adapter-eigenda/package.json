@@ -1,6 +1,6 @@
 {
   "name": "@layr-labs/agentkit-eigenda",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "EigenDA adapter for AgentKit providing data availability logging capabilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

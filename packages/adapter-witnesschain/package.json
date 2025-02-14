@@ -1,6 +1,6 @@
 {
   "name": "@layr-labs/agentkit-witnesschain",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A TypeScript adapter for Witnesschain API interactions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

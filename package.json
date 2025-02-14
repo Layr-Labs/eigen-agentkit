@@ -1,6 +1,6 @@
 {
   "name": "@eigenlayer/agentkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "A modular and extensible agent framework that provides verifiable AI capabilities",
   "workspaces": [

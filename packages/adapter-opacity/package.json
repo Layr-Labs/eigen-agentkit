@@ -1,6 +1,6 @@
 {
   "name": "@layr-labs/agentkit-opacity",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Opacity adapter for verifiable inference in EigenLayer AgentKit",
   "main": "dist/index.js",
   "module": "dist/index.js",
