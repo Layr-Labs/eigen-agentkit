@@ -33,22 +33,6 @@ export class WitnesschainAdapter {
         timeout: 10000,
       });
 
-      const all_cookies = response.headers['set-cookie'] ?? [];
-
-      let got_cookies	= "";
-      let update_cookie	= false;
-
-      for (const c of all_cookies)
-      {
-         if (c.startsWith("__"))
-		update_cookie = true;
-
-         got_cookies += c.split(";")[0] + "; ";
-      }
-
-      if (update_cookie)
-	      this.cookies = got_cookies;
-
       if (response.status === 200) {
         return response.data.result;
       } else {

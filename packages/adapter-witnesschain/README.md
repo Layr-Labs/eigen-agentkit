@@ -44,6 +44,7 @@ WITNESSCHAIN_PRIVATE_KEY=your_private_key  # For submitting proofs
 ### **Creating an API endpoint for verification**
 Refer to "https://github.com/witnesschain-com/photo-verification-api.git" for instructions on running a verification endpoint. This will need to be passed to the WitnesschainAdapter Constructor's first argument.
 
+
 ---
 
 ## 📖 Usage
