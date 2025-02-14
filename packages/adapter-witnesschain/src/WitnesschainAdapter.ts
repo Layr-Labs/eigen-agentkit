@@ -13,7 +13,7 @@ export class WitnesschainAdapter {
 
   constructor(
     apiUrl: string = "http://localhost:8000/classify-photos/",
-    blockchainApiUrl: string = "https://testnet.witnesschain.com/proof/v1/pol",
+    blockchainApiUrl: string = "https://mainnet.witnesschain.com/proof/v1/pol",
     privateKey: string = ""
   ) {
     this.apiUrl = apiUrl;
