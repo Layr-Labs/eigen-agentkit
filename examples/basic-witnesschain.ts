@@ -1,8 +1,16 @@
-import * as wc from '../src/WitnesschainAdapter';
+import * as wc from '@layr-labs/agentkit-witnesschain';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Verify required environment variables are present
+if (!process.env.WITNESSCHAIN_API_URL || !process.env.WITNESSCHAIN_BLOCKCHAIN_API_URL || !process.env.WITNESSCHAIN_PRIVATE_KEY) {
+    throw new Error('Missing required environment variables. Please check your .env file has WITNESSCHAIN_API_URL, WITNESSCHAIN_BLOCKCHAIN_API_URL, and WITNESSCHAIN_PRIVATE_KEY');
+}
 
 const witnesschain_client = new wc.WitnesschainAdapter(
 	process.env.WITNESSCHAIN_API_URL,
@@ -29,16 +37,16 @@ async function downloadImage(url: string, filepath: string): Promise<void> {
   });
 }
 
-const LATITUDE		= 10.0;
-const LONGITUDE		= 10.0;
-const MY_CAMPAIGN	= "MyCampaign";
+const LATITUDE		= 37.441023;  // Stanford University latitude
+const LONGITUDE		= -122.12686; // Stanford University longitude
+const MY_CAMPAIGN	= "MyCampaign 1";
 
 async function main()
 {
-	const logged_in = await witnesschain_client.login ();
+	const logged_in = await witnesschain_client.login();
 
 	let	since		= null;
-	const	analyzed_photos = {};
+	const	analyzed_photos: { [key: string]: boolean } = {};
 
 	if (! logged_in)
 	{
@@ -49,7 +57,7 @@ async function main()
 	// Create a campaign if it does not exist
 
 	const existing_campaigns	= await witnesschain_client.getCampaigns();
-	const campaign_exist		= existing_campaigns.some((v) => v.id === MY_CAMPAIGN);
+	const campaign_exist		= existing_campaigns.some((v: any) => v.id === MY_CAMPAIGN);
 
 	if (! campaign_exist)
 	{
