@@ -2,9 +2,9 @@
 
 A modular and extensible agent framework that provides verifiable AI capabilities and data availability logging. It integrates multiple tools under one roof:
 
-- Opacity for verifiable inference
-- EigenDA for data availability logging
-- WitnessChain for Real-world actuation and observation 
+- [Opacity](https://github.com/Layr-Labs/eigen-agentkit/tree/master/packages/adapter-opacity) for verifiable inference
+- [EigenDA](https://github.com/Layr-Labs/eigen-agentkit/tree/master/packages/adapter-eigenda) for data availability logging
+- [WitnessChain](https://github.com/Layr-Labs/eigen-agentkit/tree/master/packages/adapter-witnesschain) for Real-world actuation and observation 
 - Reclaim for verifiable API calls (TBD)
 - Formation for verifiable code execution (TBD)
 - Silence for secret publishing (TBD)
